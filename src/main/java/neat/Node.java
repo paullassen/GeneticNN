@@ -7,7 +7,6 @@ class Node implements Comparable<Node> {
 
 	static int count = 0;
 	int id;
-	static OverGen og;
 	boolean bias, input, output;
 
 	boolean calculated;
@@ -16,35 +15,20 @@ class Node implements Comparable<Node> {
 	public float value = 0f;
 
 	/**
-	 * Instantiates a new node. Use to create bias node. Sets OverGen for all
-	 * future Nodes
-	 *
-	 * @param ovG
-	 *            the ov G
-	 */
-	public Node(OverGen ovG) {
-		Node.og = ovG;
-		id = count++;
-		bias = true;
-		input = false;
-		output = false;
-		value = 1f;
-		calculated = true;
-	}
-
-	/**
-	 * Instantiates a new node. Use to create input/output nodes
+	 * Instantiates a new node. Use to create bias/input/output nodes.
+	 * Only 1 bias is allowed
 	 * 
 	 * @param mode
-	 *            the mode , 0 for input, 1 for output
+	 *            the mode , 0 for bias, 1 for input, 2 for output
 	 */
 	public Node(int mode) {
 		// Use to create input/output nodes
 		id = count++;
-		bias = false;
-		input = (mode == 0);
-		output = (mode == 1);
-		calculated = input;
+		bias = (mode == 0);
+		input = (mode == 1);
+		output = (mode == 2);
+		calculated = input || bias;
+		value = (bias ? 1f : 0f);
 	}
 
 	/**

@@ -86,14 +86,14 @@ public class OverGen {
 		seed = System.currentTimeMillis();
 		rand = new Random(seed);
 		fitFunc = f;
-		bias = new Node(this);
+		bias = new Node(0);
 		base = new Genome(this);
 		for (int i = 0; i < f.numInputs(); ++i) {
-			Node nod = new Node(0);
+			Node nod = new Node(1);
 			inList.add(nod);
 		}
 		for (int i = 0; i < f.numOutputs(); ++i) {
-			Node nod = new Node(1);
+			Node nod = new Node(2);
 			outList.add(nod);
 
 		}
