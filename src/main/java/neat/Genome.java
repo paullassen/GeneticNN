@@ -210,7 +210,8 @@ class Genome implements Comparable<Genome> {
 				}
 			}
 		}
-		Gene gen = new Gene(in, out, og);
+		Gene gen = new Gene(in, out, og.rand);
+		og.addGene(gen);
 		gen.addGenome(this);
 		genome.put(out, gen);
 		genIn.put(in, gen);
@@ -398,7 +399,7 @@ class Genome implements Comparable<Genome> {
 	 * Calculate fitness of this Genome.
 	 */
 	public void calculateFitness() {
-		og.fitFunc.calculateFitness(this);
+		fitness = og.fitFunc.calculateFitness(this);
 		/*
 		 * ArrayList<Float> inList = new ArrayList<Float>(); inList.add(1f);
 		 * inList.add(1f); float d1 = calculate(inList).get(0); inList.set(0,

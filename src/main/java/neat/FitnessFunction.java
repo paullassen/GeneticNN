@@ -16,6 +16,6 @@ public interface FitnessFunction {
 	 * @param gnm
 	 *            the gnm
 	 */
-	public void calculateFitness(Genome gnm);
+	public float calculateFitness(Genome gnm);
 
 }

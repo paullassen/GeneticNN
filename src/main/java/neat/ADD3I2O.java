@@ -16,7 +16,7 @@ public class ADD3I2O implements FitnessFunction {
 	}
 
 	@Override
-	public void calculateFitness(Genome gnm) {
+	public float calculateFitness(Genome gnm) {
 		List<Float> inList = new ArrayList<Float>();
 		inList.add(1f);
 		inList.add(1f);
@@ -59,7 +59,7 @@ public class ADD3I2O implements FitnessFunction {
 		float d80 = gnm.calculate(inList).get(0);
 		float d81 = 1f - gnm.calculate(inList).get(1);
 		float d = d10 + d11 + d20 + d21 + d30 + d31 + d40 + d41 + d50 + d51 + d60 + d61 + d70 + d71 + d80 + d81;
-		gnm.fitness = (16f - d) * (16f - d);
+		return (16f - d) * (16f - d);
 	}
 
 }

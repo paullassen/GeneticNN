@@ -17,7 +17,7 @@ class Gene implements Comparable<Gene> {
 
 	final Node in, out;
 
-	final OverGen og;
+	private final Random rand;
 
 	/**
 	 * The weight map contains a float for each Genome in which is is contained
@@ -43,12 +43,11 @@ class Gene implements Comparable<Gene> {
 	 * @param g
 	 *            the OverGen
 	 */
-	public Gene(Node inp, Node outp, OverGen g) {
-		og = g;
+	public Gene(Node inp, Node outp, Random rand) {
 		id = count++;
 		in = inp;
 		out = outp;
-		og.addGene(this);
+		this.rand = rand;
 	}
 
 	public int getId() {
@@ -66,7 +65,6 @@ class Gene implements Comparable<Gene> {
 	 *            the Genome
 	 */
 	public void changeWeight(Genome g) {
-		Random rand = og.rand;
 		float weight = weightMap.get(g).floatValue();
 		weight = weight + rand.nextFloat() * 4 - 2f;
 		weightMap.replace(g, weight);
@@ -97,7 +95,6 @@ class Gene implements Comparable<Gene> {
 	 *            the Genome to which the Gene is added
 	 */
 	public void addGenome(Genome g) {
-		Random rand = og.rand;
 		float weight = rand.nextFloat() * 4 - 2;
 		weightMap.put(g, weight);
 		this.enable(g);

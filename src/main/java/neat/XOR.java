@@ -19,7 +19,7 @@ public class XOR implements FitnessFunction {
 	}
 
 	@Override
-	public void calculateFitness(Genome gnm) {
+	public float calculateFitness(Genome gnm) {
 		List<Float> inList = new ArrayList<Float>();
 		inList.add(0f);
 		inList.add(0f);
@@ -34,7 +34,7 @@ public class XOR implements FitnessFunction {
 		inList.set(1, 1f);
 		float d4 = gnm.calculate(inList).get(0);
 		float d = d1 + d2 + d3 + d4;
-		gnm.fitness = (4f - d) * (4f - d);
+		return (4f - d) * (4f - d);
 	}
 
 }

@@ -18,7 +18,7 @@ public class XOR3I implements FitnessFunction{
 	}
 
 	@Override
-	public void calculateFitness(Genome gnm) {
+	public float calculateFitness(Genome gnm) {
 		List<Float> inList = new ArrayList<Float>();
 		inList.add(1f);
 		inList.add(1f);
@@ -53,7 +53,7 @@ public class XOR3I implements FitnessFunction{
 		inList.set(2, 0f);
 		float d8 = 1f - gnm.calculate(inList).get(0);
 		float d = d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8;
-		gnm.fitness = (8f - d) * (8f - d);
+		return (8f - d) * (8f - d);
 	}
 
 }
