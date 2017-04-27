@@ -143,7 +143,6 @@ public class OverGen {
 		rand.setSeed(seed);
 		this.seed = seed;
 	}
-
 	/**
 	 * Gets the seed.
 	 *
@@ -152,7 +151,6 @@ public class OverGen {
 	public long getSeed() {
 		return seed;
 	}
-
 	/**
 	 * Creates the base population.
 	 *
@@ -177,7 +175,6 @@ public class OverGen {
 		generation.add(tmpPop);
 		speciate();
 	}
-
 	/**
 	 * Calculates the fitness for each member of the population. Then finds the
 	 * most fit Genomes and puts them in the topFit and sharedTopFit Sets
@@ -227,7 +224,6 @@ public class OverGen {
 		}
 		System.out.println("_______________________________\n");
 	}
-
 	/**
 	 * Checks if two genomes are of the same species.
 	 *
@@ -275,7 +271,6 @@ public class OverGen {
 
 		return distance < distThresh;
 	}
-
 	/**
 	 * Populate the next generation
 	 */
@@ -319,7 +314,7 @@ public class OverGen {
 					break;
 				} else if (spcsList.get(i).size() == 1) {
 					if (j * 2 < topList.get(i)) {
-						Genome g = mate(spcsList.get(i).get(0), spcsList.get(i).get(0));
+						Genome g = spcsList.get(i).get(0).mate(spcsList.get(i).get(0));
 						g.mutate();
 						tmpPop.add(g);
 					} else {
@@ -329,7 +324,7 @@ public class OverGen {
 
 						}
 						int spInd = rand.nextInt(spcsList.get(spc).size());
-						Genome g = mate(spcsList.get(i).get(0), spcsList.get(spc).get(spInd));
+						Genome g = spcsList.get(i).get(0).mate(spcsList.get(spc).get(spInd));
 						tmpPop.add(g);
 					}
 				} else {
@@ -344,7 +339,7 @@ public class OverGen {
 					}
 					int spInd = rand.nextInt(spcsList.get(spc).size());
 
-					Genome g = mate(spcsList.get(i).get(ind), spcsList.get(spc).get(spInd));
+					Genome g = spcsList.get(i).get(ind).mate(spcsList.get(spc).get(spInd));
 					tmpPop.add(g);
 				}
 			}
@@ -354,7 +349,7 @@ public class OverGen {
 			int r1 = rand.nextInt(tmp.size());
 			int r2 = rand.nextInt(tmp.size());
 
-			Genome g = mate(tmp.get(r1), tmp.get(r2));
+			Genome g = tmp.get(r1).mate(tmp.get(r2));
 			g.mutate();
 			tmpPop.add(g);
 		}
@@ -363,7 +358,6 @@ public class OverGen {
 		speciate();
 
 	}
-
 	/**
 	 * Define the different species.
 	 */
@@ -406,23 +400,6 @@ public class OverGen {
 				+ (System.currentTimeMillis() - lastTime) / 1000f);
 		lastTime = System.currentTimeMillis();
 	}
-
-	/**
-	 * Returns a Genome that is the 'Child' of the two input Genomes
-	 *
-	 * @param g1
-	 *            parent 1
-	 * @param g2
-	 *            parent 2
-	 * @return the child
-	 */
-	private Genome mate(Genome g1, Genome g2) {
-		if (g1 == g2) {
-			return new Genome(g1);
-		}
-		return new Genome(g1, g2);
-	}
-
 	/**
 	 * Adds the gene g to this Genome.
 	 *

@@ -366,7 +366,22 @@ class Genome implements Comparable<Genome> {
 		}
 		return null;
 	}
-
+	/**
+	 * Returns a Genome that is the 'Child' of the this Genome and the input
+	 * Genomes
+	 *
+	 * @param gnm
+	 *            parent
+	 * @return the child
+	 */
+	public Genome mate(Genome gnm) {
+		if (gnm == this) {
+			Genome genome = new Genome(gnm);
+			//genome.mutate();
+			return genome;
+		}
+		return new Genome(gnm, this);
+	}
 	/**
 	 * Calculate the output of the Genome.
 	 *
