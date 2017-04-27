@@ -105,7 +105,34 @@ public class OverGen {
 		}
 
 	}
-
+	/**
+	 * Begin evolving the network.
+	 *
+	 * @param popSize
+	 *            the population size
+	 * @param maxLoops
+	 *            the max number of loops
+	 * @return the winning genome, null if maxLoops
+	 */
+	public Genome run(int popSize, int maxLoops) {
+		float threshold = fitFunc.getThreshold();
+		createBasePop(popSize);
+		popFitness();
+		List<Genome> tf = new ArrayList<Genome>(topFit);
+		Genome fittest = Collections.min(tf);
+		while (fittest.fitness < threshold) {
+			populateGeneration();
+			popFitness();
+			if (gen >= maxLoops) {
+				return null;
+			}
+			tf = new ArrayList<Genome>(topFit);
+			fittest = Collections.min(tf);
+		}
+		System.out.println("Winning Fitness: " + fittest.fitness);
+		System.out.print("\tFinal Generation: " + gen);
+		return fittest;
+	}
 	/**
 	 * Sets the seed for the Random.
 	 *
