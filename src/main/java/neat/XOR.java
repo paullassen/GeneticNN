@@ -37,4 +37,8 @@ public class XOR implements FitnessFunction {
 		return (4f - d) * (4f - d);
 	}
 
+	@Override
+	public float getThreshold() {
+		return 15.9f;
+	}
 }

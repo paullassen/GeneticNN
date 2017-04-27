@@ -6,6 +6,8 @@ package neat;
  */
 public interface FitnessFunction {
 
+	public float getThreshold();
+	
 	public int numInputs();
 	
 	public int numOutputs();

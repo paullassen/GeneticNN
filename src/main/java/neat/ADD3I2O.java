@@ -61,5 +61,7 @@ public class ADD3I2O implements FitnessFunction {
 		float d = d10 + d11 + d20 + d21 + d30 + d31 + d40 + d41 + d50 + d51 + d60 + d61 + d70 + d71 + d80 + d81;
 		return (16f - d) * (16f - d);
 	}
-
+	public float getThreshold() {
+		return 225;
+	}
 }
