@@ -89,11 +89,11 @@ public class OverGen {
 		bias = new Node(0);
 		base = new Genome(this);
 		for (int i = 0; i < f.numInputs(); ++i) {
-			Node nod = new Node(1);
+			Node nod = new Node(0);
 			inList.add(nod);
 		}
 		for (int i = 0; i < f.numOutputs(); ++i) {
-			Node nod = new Node(2);
+			Node nod = new Node(1);
 			outList.add(nod);
 
 		}
@@ -105,6 +105,7 @@ public class OverGen {
 		}
 
 	}
+
 	/**
 	 * Begin evolving the network.
 	 *
@@ -133,6 +134,7 @@ public class OverGen {
 		System.out.print("\tFinal Generation: " + gen);
 		return fittest;
 	}
+
 	/**
 	 * Sets the seed for the Random.
 	 *
@@ -143,6 +145,7 @@ public class OverGen {
 		rand.setSeed(seed);
 		this.seed = seed;
 	}
+
 	/**
 	 * Gets the seed.
 	 *
@@ -151,6 +154,7 @@ public class OverGen {
 	public long getSeed() {
 		return seed;
 	}
+
 	/**
 	 * Creates the base population.
 	 *
@@ -175,6 +179,7 @@ public class OverGen {
 		generation.add(tmpPop);
 		speciate();
 	}
+
 	/**
 	 * Calculates the fitness for each member of the population. Then finds the
 	 * most fit Genomes and puts them in the topFit and sharedTopFit Sets
@@ -224,6 +229,7 @@ public class OverGen {
 		}
 		System.out.println("_______________________________\n");
 	}
+
 	/**
 	 * Checks if two genomes are of the same species.
 	 *
@@ -271,6 +277,7 @@ public class OverGen {
 
 		return distance < distThresh;
 	}
+
 	/**
 	 * Populate the next generation
 	 */
@@ -358,6 +365,7 @@ public class OverGen {
 		speciate();
 
 	}
+
 	/**
 	 * Define the different species.
 	 */
@@ -400,6 +408,7 @@ public class OverGen {
 				+ (System.currentTimeMillis() - lastTime) / 1000f);
 		lastTime = System.currentTimeMillis();
 	}
+
 	/**
 	 * Adds the gene g to this Genome.
 	 *

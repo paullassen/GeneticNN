@@ -122,7 +122,7 @@ class Genome implements Comparable<Genome> {
 		// Node cannot be inserted into a disabled gene or a bias gene
 		List<Gene> genList = new ArrayList<Gene>();
 		for (Gene g : genome.values()) {
-			if (!g.in.bias && g.getState(this)) {
+			if (g.in == og.bias && g.getState(this)) {
 				// Create a list of viable genes to be disabled
 				genList.add(g);
 			}
@@ -136,7 +136,7 @@ class Genome implements Comparable<Genome> {
 		// If this is the first time the gene is being disabled, create new node
 		// Otehrwise use the disabler node
 		if (gen.disabler == null) {
-			Node n = new Node();
+			Node n = new Node(1);
 			gen.disable(this, n);
 
 			// Each hidden node is connected to 3 nodes (bias, input : output)
@@ -278,7 +278,7 @@ class Genome implements Comparable<Genome> {
 		if (genome.get(in).contains(out)) {
 			return false;
 		}
-		if (in.bias || in.input) {
+		if (in.input) {
 			return true;
 		}
 		boolean b = true;
@@ -366,6 +366,7 @@ class Genome implements Comparable<Genome> {
 		}
 		return null;
 	}
+
 	/**
 	 * Returns a Genome that is the 'Child' of the this Genome and the input
 	 * Genomes
@@ -377,11 +378,12 @@ class Genome implements Comparable<Genome> {
 	public Genome mate(Genome gnm) {
 		if (gnm == this) {
 			Genome genome = new Genome(gnm);
-			//genome.mutate();
+			// genome.mutate();
 			return genome;
 		}
 		return new Genome(gnm, this);
 	}
+
 	/**
 	 * Calculate the output of the Genome.
 	 *
@@ -397,6 +399,7 @@ class Genome implements Comparable<Genome> {
 		for (int i = 0; i < og.inList.size(); ++i) {
 			Node n = og.inList.get(i);
 			n.value = inList.get(i);
+			og.bias.value = 1f;
 		}
 
 		for (Node n : genome.keySet()) {
