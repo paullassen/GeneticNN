@@ -2,7 +2,6 @@ package neat;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +107,7 @@ public class OverGen {
 		createBasePop(popSize);
 		popFitness();
 		List<Genome> tf = new ArrayList<Genome>(generation.get(gen));
-		Genome fittest = Collections.min(tf, (new GenomeFitnessComparatorDesc()));
+		Genome fittest = Collections.min(tf);
 		while (fittest.fitness < threshold) {
 			populateGeneration();
 			popFitness();
@@ -116,7 +115,7 @@ public class OverGen {
 				return null;
 			}
 			tf = new ArrayList<Genome>(generation.get(gen));
-			fittest = Collections.min(tf, (new GenomeFitnessComparatorDesc()));
+			fittest = Collections.min(tf);
 		}
 		System.out.println("Winning Fitness: " + fittest.fitness);
 		System.out.print("\tFinal Generation: " + gen);
@@ -179,7 +178,7 @@ public class OverGen {
 			//g.calculateSharedFitness();
 		}
 
-		Genome g = Collections.min(generation.get(gen), (new GenomeFitnessComparatorDesc()));
+		Genome g = Collections.min(generation.get(gen));
 		System.out.println("\nTop Fitness and Shared Fitness of Generation " + gen);
 		System.out.println("#1 Fitness:\t" + g.fitness);
 
@@ -372,15 +371,3 @@ public class OverGen {
 	}
 }
 
-class GenomeFitnessComparatorDesc implements Comparator<Genome> {
-
-	@Override
-	public int compare(Genome o1, Genome o2) {
-		// Compare Lexographically by fitness(desc) then id(asc)
-		Float f1 = o1.fitness;
-		Float f2 = o2.fitness;
-		Integer id1 = o1.id;
-		Integer id2 = o2.id;
-		return (f2.compareTo(f1) == 0 ? (id1.compareTo(id2)) : f2.compareTo(f1));
-	}
-}
