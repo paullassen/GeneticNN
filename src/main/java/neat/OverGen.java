@@ -199,10 +199,10 @@ public class OverGen {
 	 * @return true, if the genomes share species
 	 */
 	public boolean compatable(Genome g1, Genome g2) {
-		float distThresh = 0.4f;
-		float c1 = 0.3f; // Weights the excess (e)
-		float c2 = 0.3f; // Weights the disjoint (d)
-		float c3 = 0.3f; // Weights the weight difference (w)
+		float distThresh = 1f;
+		float c1 = 0.6f; // Weights the excess (e)
+		float c2 = 0.6f; // Weights the disjoint (d)
+		float c3 = 0.6f; // Weights the weight difference (w)
 		Set<Gene> s1 = new TreeSet<Gene>(g1.genome.values());
 		Set<Gene> s2 = new TreeSet<Gene>(g2.genome.values());
 		int e = 0;
@@ -280,7 +280,6 @@ public class OverGen {
 			tmp.add(gnm);
 		}
 		tmpPop.addAll(tmp);
-		System.out.println("Population: " + tmpPop.size());
 		for (int i = 0; i < topList.size() && tmpPop.size() < popSize; ++i) {
 			for (int j = 0; j < topList.get(i); ++j) {
 				if (spcsList.get(i).size() == 0 || tmpPop.size() >= popSize) {

@@ -12,7 +12,7 @@ public class NEAT {
 	 */
 	public static void main(String[] args) {
 		// Two input XOR
-		FitnessFunction fitFunc = new XOR();
+		 FitnessFunction fitFunc = new XOR();
 		// Three input XOR
 		// FitnessFunction fitFunc = new XOR3I();
 		// sum of 3 [1 bit]-inputs
@@ -20,7 +20,7 @@ public class NEAT {
 
 		OverGen og = new OverGen(fitFunc);
 
-		Genome gnm = og.run(200, 1000);
+		Genome gnm = og.run(100, 1000);
 		if (gnm != null) {
 			gnm.printFloat();
 		}
