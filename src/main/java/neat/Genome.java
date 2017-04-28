@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * This class contains the network of Nodes (vertices) and Genes (edges)

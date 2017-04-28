@@ -3,7 +3,6 @@ package neat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -343,8 +342,6 @@ public class OverGen {
 			thisGen.put(0, generation.get(gen).get(0));
 		}
 		for (Genome g : generation.get(gen)) {
-			boolean newSpecies = true; 
-
 			if (!thisGen.containsValue(g)) {
 				for (int i : archetypeMap.keySet()) {
 					if (compatable(g, archetypeMap.get(i))) {
@@ -353,7 +350,6 @@ public class OverGen {
 					}
 				}
 			}
-
 			if (!thisGen.containsValue(g)) {
 				int spNum = Collections.max(archetypeMap.keySet()) + 1;
 				archetypeMap.put(spNum, g);
