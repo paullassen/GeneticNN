@@ -139,11 +139,6 @@ class Gene implements Comparable<Gene> {
 		stateMap.put(g, true);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
 	@Override
 	public int compareTo(Gene arg0) {
 		// Compare by id

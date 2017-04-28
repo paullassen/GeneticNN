@@ -26,9 +26,6 @@ public class OverGen {
 	/** Map of all species atchetypes indexed by species id */
 	Map<Integer, Genome> archetypeMap = new HashMap<Integer, Genome>();
 
-	/** Species fitness map */
-	List<Multimap<Integer, Float>> sfMap = new ArrayList<Multimap<Integer, Float>>();
-
 	/** Species map. */
 	List<Multimap<Integer, Genome>> speciesMap = new ArrayList<Multimap<Integer, Genome>>();
 
@@ -38,20 +35,11 @@ public class OverGen {
 	/** List of output nodes */
 	List<Node> outList = new ArrayList<Node>();
 
-	/** The nod list. */
-	// List<Node> nodList = new ArrayList<Node>();
-
 	/** The genome list. */
 	List<Genome> genomeList = new ArrayList<Genome>();
 
 	/** List of all Genomes by Generation */
 	List<List<Genome>> generation = new ArrayList<List<Genome>>();
-
-	/** The top fit. */
-	Set<Genome> topFit = new TreeSet<Genome>();
-
-	/** The shared top fit. */
-	Set<Genome> sharedTopFit = new TreeSet<Genome>();
 
 	FitnessFunction fitFunc;
 
@@ -119,16 +107,16 @@ public class OverGen {
 		float threshold = fitFunc.getThreshold();
 		createBasePop(popSize);
 		popFitness();
-		List<Genome> tf = new ArrayList<Genome>(topFit);
-		Genome fittest = Collections.min(tf);
+		List<Genome> tf = new ArrayList<Genome>(generation.get(gen));
+		Genome fittest = Collections.min(tf, (new GenomeFitnessComparatorDesc()));
 		while (fittest.fitness < threshold) {
 			populateGeneration();
 			popFitness();
 			if (gen >= maxLoops) {
 				return null;
 			}
-			tf = new ArrayList<Genome>(topFit);
-			fittest = Collections.min(tf);
+			tf = new ArrayList<Genome>(generation.get(gen));
+			fittest = Collections.min(tf, (new GenomeFitnessComparatorDesc()));
 		}
 		System.out.println("Winning Fitness: " + fittest.fitness);
 		System.out.print("\tFinal Generation: " + gen);
@@ -188,45 +176,13 @@ public class OverGen {
 		for (Genome g : generation.get(gen)) {
 
 			g.calculateFitness();
-			g.calculateSharedFitness();
+			//g.calculateSharedFitness();
 		}
 
-		Set<Genome> sfs = new TreeSet<Genome>(sharedTopFit);
-		sfs.addAll(generation.get(gen));
-		Set<Genome> tfs = new TreeSet<Genome>(new GenomeFitnessComparatorDesc());
-		tfs.addAll(topFit);
-		tfs.addAll(sfs);
-		sharedTopFit = new TreeSet<Genome>();
-		for (Genome g : sfs) {
-			if (sharedTopFit.size() < topSize) {
-				sharedTopFit.add(g);
-			} else {
-				break;
-			}
-		}
-		topFit = new TreeSet<Genome>(new GenomeFitnessComparatorDesc());
-		for (Genome g : tfs) {
-			if (topFit.size() < topSize) {
-				topFit.add(g);
-			} else {
-				break;
-			}
-		}
+		Genome g = Collections.min(generation.get(gen), (new GenomeFitnessComparatorDesc()));
 		System.out.println("\nTop Fitness and Shared Fitness of Generation " + gen);
-		int i = 0;
-		for (Genome g : topFit) {
-			System.out.print("#" + (i + 1) + " Fitness:\t" + g.fitness + "  (" + g.sharedFitness + ")");
-			if (++i >= 1) {
-				break;
-			}
-		}
-		for (Genome g : sharedTopFit) {
-			System.out.println("   \t #" + (i) + " Shared Fitness:\t" + g.sharedFitness + "  (" + g.fitness + ")");
-			// g.printGenome();
-			if (++i >= 2) {
-				break;
-			}
-		}
+		System.out.println("#1 Fitness:\t" + g.fitness);
+
 		System.out.println("_______________________________\n");
 	}
 
@@ -285,14 +241,19 @@ public class OverGen {
 
 		Map<Integer, Float> sumMap = new TreeMap<Integer, Float>();
 		float totalSum = 0f;
-		for (int i : sfMap.get(gen).keySet()) {
+		
+		for (int i : speciesMap.get(gen).keySet()){
 			float sum = 0f;
-			for (float f : sfMap.get(gen).get(i)) {
-				sum += f;
+			int c = 0;
+			for (Genome g : speciesMap.get(gen).get(i)){
+				c++;
+				sum += g.fitness;
 			}
+			sum /= c;
 			sumMap.put(i, sum);
 			totalSum += sum;
 		}
+
 
 		List<List<Genome>> spcsList = new ArrayList<List<Genome>>();
 		List<Integer> topList = new ArrayList<Integer>();
@@ -394,15 +355,6 @@ public class OverGen {
 		speciesMap.add(thisGen);
 		popFitness();
 
-		/*
-		 * for (int i : thisGen.keySet()) { List<Genome> gL = new
-		 * ArrayList<Genome>(thisGen.get(i)); Collections.sort(gL);
-		 * System.out.println("Species: " + i + "\tSize: " +
-		 * thisGen.get(i).size() + " \tTop Shared Fitness: " +
-		 * gL.get(0).sharedFitness);
-		 * 
-		 * }
-		 */
 		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGen.keySet().size() + "\tGenes/Node: "
 				+ (float) Gene.count / Node.count + "\t Time Since Last: "
 				+ (System.currentTimeMillis() - lastTime) / 1000f);

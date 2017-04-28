@@ -12,7 +12,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 /**
- * This class contains teh netwrok of Nodes (vertices) and Genes (edges)
+ * This class contains the network of Nodes (vertices) and Genes (edges)
  */
 class Genome implements Comparable<Genome> {
 
@@ -25,8 +25,6 @@ class Genome implements Comparable<Genome> {
 	HashMultimap<Node, Gene> genome = HashMultimap.create();
 
 	float fitness;
-
-	float sharedFitness;
 
 	int id;
 
@@ -418,49 +416,14 @@ class Genome implements Comparable<Genome> {
 	 */
 	public void calculateFitness() {
 		fitness = og.fitFunc.calculateFitness(this);
-		/*
-		 * ArrayList<Float> inList = new ArrayList<Float>(); inList.add(1f);
-		 * inList.add(1f); float d1 = calculate(inList).get(0); inList.set(0,
-		 * 0f); inList.set(1, 0f); float d2 = calculate(inList).get(0);
-		 * inList.set(0, 1f); inList.set(1, 0f); float d3 = 1f -
-		 * calculate(inList).get(0); inList.set(0, 0f); inList.set(1, 1f); float
-		 * d4 = 1f - calculate(inList).get(0); float d = d1 + d2 + d3 + d4;
-		 * fitness = (4f - d) * (4f - d);
-		 */
-
 	}
 
-	/**
-	 * Calculate shared fitness of this Genome.
-	 */
-	public void calculateSharedFitness() {
-
-		while (og.sfMap.size() <= og.gen) {
-			Multimap<Integer, Float> hmm = HashMultimap.create();
-			og.sfMap.add(hmm);
-		}
-		Multimap<Integer, Genome> spm = og.speciesMap.get(og.gen);
-		for (int i : spm.keySet()) {
-			if (spm.get(i).contains(this)) {
-				int spSize = og.speciesMap.get(og.gen).get(i).size();
-
-				sharedFitness = fitness / spSize;
-				og.sfMap.get(og.gen).put(i, sharedFitness);
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
 	@Override
 	public int compareTo(Genome arg0) {
 		// Compare Genomes by shared fitness descending;
 		// Then id ascending;
-		Float af = arg0.sharedFitness;
-		Float tf = this.sharedFitness;
+		Float af = arg0.fitness;
+		Float tf = this.fitness;
 		Integer aid = arg0.id;
 		Integer iid = this.id;
 		return (af.compareTo(tf) == 0 ? (iid.compareTo(aid)) : af.compareTo(tf));
