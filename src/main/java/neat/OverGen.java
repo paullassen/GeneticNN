@@ -3,6 +3,7 @@ package neat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -21,13 +22,16 @@ public class OverGen {
 
 	/** MultiMap of all Genes indexed by output node */
 	Multimap<Node, Gene> geneMap = HashMultimap.create();
-
+	
 	/** Map of all species atchetypes indexed by species id */
 	Map<Integer, Genome> archetypeMap = new HashMap<Integer, Genome>();
 
 	/** Species map. */
 	List<Multimap<Integer, Genome>> speciesMap = new ArrayList<Multimap<Integer, Genome>>();
 
+
+	
+	
 	/** List of input nodes */
 	List<Node> inList = new ArrayList<Node>();
 
@@ -175,7 +179,7 @@ public class OverGen {
 		for (Genome g : generation.get(gen)) {
 
 			g.calculateFitness();
-			//g.calculateSharedFitness();
+			// g.calculateSharedFitness();
 		}
 
 		Genome g = Collections.min(generation.get(gen));
@@ -240,11 +244,11 @@ public class OverGen {
 
 		Map<Integer, Float> sumMap = new TreeMap<Integer, Float>();
 		float totalSum = 0f;
-		
-		for (int i : speciesMap.get(gen).keySet()){
+
+		for (int i : speciesMap.get(gen).keySet()) {
 			float sum = 0f;
 			int c = 0;
-			for (Genome g : speciesMap.get(gen).get(i)){
+			for (Genome g : speciesMap.get(gen).get(i)) {
 				c++;
 				sum += g.fitness;
 			}
@@ -253,20 +257,21 @@ public class OverGen {
 			totalSum += sum;
 		}
 
-
 		List<List<Genome>> spcsList = new ArrayList<List<Genome>>();
 		List<Integer> topList = new ArrayList<Integer>();
 		for (int i : speciesMap.get(gen).keySet()) {
 			List<Genome> spcs = new ArrayList<Genome>(speciesMap.get(gen).get(i));
 			Collections.sort(spcs);
 			int top = Math.round((popSize - topSize) * (sumMap.get(i) / totalSum));
-			spcsList.add(spcs.subList(0, (spcs.size() == 1 ? 1 : spcs.size() / 2)));
+			spcsList.add(spcs.subList(0, spcs.size() / 2));
 			topList.add(top);
 		}
 
 		Set<Genome> tmpPop = new TreeSet<Genome>();
 		for (List<Genome> spcs : spcsList) {
-			tmpPop.add(spcs.get(0));
+			if (!spcs.isEmpty()) {				
+				tmpPop.add(spcs.get(0));
+			}
 		}
 		List<Genome> tmp = new ArrayList<Genome>();
 		for (Genome g : tmpPop) {
@@ -275,7 +280,8 @@ public class OverGen {
 			tmp.add(gnm);
 		}
 		tmpPop.addAll(tmp);
-		for (int i = 0; i < topList.size(); ++i) {
+		System.out.println("Population: " + tmpPop.size());
+		for (int i = 0; i < topList.size() && tmpPop.size() < popSize; ++i) {
 			for (int j = 0; j < topList.get(i); ++j) {
 				if (spcsList.get(i).size() == 0 || tmpPop.size() >= popSize) {
 					break;
@@ -331,11 +337,15 @@ public class OverGen {
 	 */
 	public void speciate() {
 		Multimap<Integer, Genome> thisGen = HashMultimap.create();
+
 		if (gen == 0) {
+
 			archetypeMap.put(0, generation.get(gen).get(0));
 			thisGen.put(0, generation.get(gen).get(0));
 		}
 		for (Genome g : generation.get(gen)) {
+			boolean newSpecies = true; 
+
 			if (!thisGen.containsValue(g)) {
 				for (int i : archetypeMap.keySet()) {
 					if (compatable(g, archetypeMap.get(i))) {
@@ -344,18 +354,17 @@ public class OverGen {
 					}
 				}
 			}
+
 			if (!thisGen.containsValue(g)) {
 				int spNum = Collections.max(archetypeMap.keySet()) + 1;
 				archetypeMap.put(spNum, g);
 				thisGen.put(spNum, g);
 			}
 		}
-
 		speciesMap.add(thisGen);
-		popFitness();
 
-		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGen.keySet().size() + "\tGenes/Node: "
-				+ (float) Gene.count / Node.count + "\t Time Since Last: "
+		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGen.keySet().size() + "\tPopulation: "
+				+ generation.get(gen).size() + "\t Time Since Last: "
 				+ (System.currentTimeMillis() - lastTime) / 1000f);
 		lastTime = System.currentTimeMillis();
 	}
@@ -364,10 +373,9 @@ public class OverGen {
 	 * Adds the gene g to this Genome.
 	 *
 	 * @param g
-	 *            the g
+	 *            the gene to add
 	 */
 	public void addGene(Gene g) {
 		geneMap.put(g.out, g);
 	}
 }
-

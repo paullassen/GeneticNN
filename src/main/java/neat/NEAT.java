@@ -20,7 +20,7 @@ public class NEAT {
 
 		OverGen og = new OverGen(fitFunc);
 
-		Genome gnm = og.run(100, 500);
+		Genome gnm = og.run(200, 1000);
 		if (gnm != null) {
 			gnm.printFloat();
 		}
