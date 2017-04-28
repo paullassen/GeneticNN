@@ -279,7 +279,7 @@ public class OverGen {
 			tmp.add(gnm);
 		}
 		tmpPop.addAll(tmp);
-		for (int i = 0; i < topList.size() && tmpPop.size() < popSize; ++i) {
+		for (int i = 0; i < topList.size(); ++i) {
 			for (int j = 0; j < topList.get(i); ++j) {
 				if (spcsList.get(i).size() == 0 || tmpPop.size() >= popSize) {
 					break;
