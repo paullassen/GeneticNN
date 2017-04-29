@@ -26,7 +26,7 @@ public class Population {
 	Map<Integer, Network> archetypeMap = new HashMap<Integer, Network>();
 
 	/** Species map. */
-	List<Multimap<Integer, Network>> speciesMap = new ArrayList<Multimap<Integer, Network>>();
+	Multimap<Integer, Network> speciesMap;
 
 	/** List of input nodes */
 	List<Node> inList = new ArrayList<Node>();
@@ -38,7 +38,7 @@ public class Population {
 	List<Network> networkList = new ArrayList<Network>();
 
 	/** List of all Networks by Generation */
-	List<List<Network>> generation = new ArrayList<List<Network>>();
+	List<Network> generation = new ArrayList<Network>();
 
 	FitnessFunction fitFunc;
 
@@ -49,9 +49,6 @@ public class Population {
 
 	/** The seed. */
 	long seed;
-
-	/** The current generation */
-	int gen = 0;
 
 	int popSize = 0;
 
@@ -106,20 +103,20 @@ public class Population {
 		double threshold = fitFunc.getThreshold();
 		createBasePop(popSize);
 		popFitness();
-		List<Network> tf = new ArrayList<Network>(generation.get(gen));
+		List<Network> tf = new ArrayList<Network>(generation);
 		Network fittest = Collections.min(tf);
-		while (fittest.fitness < threshold) {
+		for(int i = 0; i < maxLoops; ++i){
 			populateGeneration();
 			popFitness();
-			if (gen >= maxLoops) {
-				return null;
-			}
-			tf = new ArrayList<Network>(generation.get(gen));
+			tf = new ArrayList<Network>(generation);
 			fittest = Collections.min(tf);
+			if(fittest.fitness > threshold){
+				System.out.println("Winning Fitness:  " + fittest.fitness);
+				System.out.println("Final Generation: " + i);
+				return fittest;
+			}
 		}
-		System.out.println("Winning Fitness: " + fittest.fitness);
-		System.out.print("\tFinal Generation: " + gen);
-		return fittest;
+		return null;
 	}
 
 	/**
@@ -163,7 +160,7 @@ public class Population {
 			networkList.add(g);
 			tmpPop.add(g);
 		}
-		generation.add(tmpPop);
+		generation = tmpPop;
 		speciate();
 	}
 
@@ -172,41 +169,36 @@ public class Population {
 	 * most fit Networks and puts them in the topFit and sharedTopFit Sets
 	 */
 	public void popFitness() {
-		for (Network g : generation.get(gen)) {
-
-			g.calculateFitness();
-			// g.calculateSharedFitness();
+		for (Network n : generation) {
+			n.calculateFitness();
 		}
-
-		Network g = Collections.min(generation.get(gen));
-		System.out.println("\nTop Fitness and Shared Fitness of Generation " + gen);
-		System.out.printf("#1 Fitness:\t%.6f\n", g.fitness);
-
-		System.out.println("_______________________________\n");
+		Network n = Collections.min(generation);
+		System.out.printf("Top Fitness:\t%.6f\n", n.fitness);
+		System.out.println("_______________________________");
 	}
 
 	/**
 	 * Checks if two networks are of the same species.
 	 *
-	 * @param g1
-	 *            the g 1
-	 * @param g2
-	 *            the g 2
+	 * @param n1
+	 *            
+	 * @param n2
+	 *            
 	 * @return true, if the networks share species
 	 */
-	public boolean compatable(Network g1, Network g2) {
+	public boolean compatable(Network n1, Network n2) {
 		double distThresh = 1f;
 		double c1 = 0.6f; // Weights the excess (e)
 		double c2 = 0.6f; // Weights the disjoint (d)
 		double c3 = 0.6f; // Weights the weight difference (w)
-		Set<Edge> s1 = new TreeSet<Edge>(g1.network.values());
-		Set<Edge> s2 = new TreeSet<Edge>(g2.network.values());
+		Set<Edge> s1 = new TreeSet<Edge>(n1.network.values());
+		Set<Edge> s2 = new TreeSet<Edge>(n2.network.values());
 		int e = 0;
 		int d = 0;
 		double w = 0f;
 		int N = (s1.size() > s2.size() ? s1.size() : s2.size());
-		Edge max1 = Collections.max(g1.network.values());
-		Edge max2 = Collections.max(g2.network.values());
+		Edge max1 = Collections.max(n1.network.values());
+		Edge max2 = Collections.max(n2.network.values());
 
 		if (max1 != max2) {
 			boolean b = max1.getId() > max2.getId();
@@ -224,7 +216,7 @@ public class Population {
 		d = s1.size() + s2.size() - 2 * s.size() - e;
 
 		for (Edge g : s) {
-			w += Math.abs(g.getWeight(g1) - g.getWeight(g2));
+			w += Math.abs(g.getWeight(n1) - g.getWeight(n2));
 		}
 		w /= s.size();
 
@@ -241,10 +233,10 @@ public class Population {
 		Map<Integer, Double> sumMap = new TreeMap<Integer, Double>();
 		double totalSum = 0f;
 
-		for (int i : speciesMap.get(gen).keySet()) {
+		for (int i : speciesMap.keySet()) {
 			double sum = 0f;
 			int c = 0;
-			for (Network g : speciesMap.get(gen).get(i)) {
+			for (Network g : speciesMap.get(i)) {
 				c++;
 				sum += g.fitness;
 			}
@@ -256,8 +248,8 @@ public class Population {
 		List<List<Network>> spcsList = new ArrayList<List<Network>>();
 		List<Integer> topList = new ArrayList<Integer>();
 		
-		for (int i : speciesMap.get(gen).keySet()) {
-			List<Network> spcs = new ArrayList<Network>(speciesMap.get(gen).get(i));
+		for (int i : speciesMap.keySet()) {
+			List<Network> spcs = new ArrayList<Network>(speciesMap.get(i));
 			Collections.sort(spcs);
 			int top = (int) Math.round((popSize - topSize) * (sumMap.get(i) / totalSum));
 			spcsList.add(spcs.subList(0, spcs.size() / 2));
@@ -322,8 +314,8 @@ public class Population {
 			net.mutate();
 			tmpPop.add(net);
 		}
-		gen++;
-		generation.add(new ArrayList<Network>(tmpPop));
+		//gen++;
+		generation = new ArrayList<Network>(tmpPop);
 		speciate();
 
 	}
@@ -333,11 +325,11 @@ public class Population {
 	 */
 	public void speciate() {
 		Multimap<Integer, Network> thisGeneration = HashMultimap.create();
-		if (gen == 0) {
-			archetypeMap.put(0, generation.get(gen).get(0));
-			thisGeneration.put(0, generation.get(gen).get(0));
+		if (speciesMap == null) {
+			archetypeMap.put(0, generation.get(0));
+			thisGeneration.put(0, generation.get(0));
 		}
-		for (Network net : generation.get(gen)) {
+		for (Network net : generation) {
 			if (!thisGeneration.containsValue(net)) {
 				for (int i : archetypeMap.keySet()) {
 					if (compatable(net, archetypeMap.get(i))) {
@@ -352,12 +344,12 @@ public class Population {
 				thisGeneration.put(spNum, net);
 			}
 		}
-		speciesMap.add(thisGeneration);
+		speciesMap = thisGeneration;
 
-		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGeneration.keySet().size() + "\tPopulation: "
-				+ generation.get(gen).size() + "\t Time Since Last: "
+		/*System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGeneration.keySet().size() + "\tPopulation: "
+				+ generation.size() + "\t Time Since Last: "
 				+ (System.currentTimeMillis() - lastTime) / 1000f);
-		lastTime = System.currentTimeMillis();
+		lastTime = System.currentTimeMillis();*/
 	}
 
 	/**
