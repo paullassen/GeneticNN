@@ -12,15 +12,15 @@ public class NEAT {
 	 */
 	public static void main(String[] args) {
 		// Two input XOR
-		 FitnessFunction fitFunc = new XOR();
+		// FitnessFunction fitFunc = new XOR();
 		// Three input XOR
 		// FitnessFunction fitFunc = new XOR3I();
 		// sum of 3 [1 bit]-inputs
-		// FitnessFunction fitFunc = new ADD3I2O();
+		FitnessFunction fitFunc = new ADD2I2O();
 
 		Population og = new Population(fitFunc);
 
-		Network gnm = og.run(100, 1000);
+		Network gnm = og.run(200, 500);
 		if (gnm != null) {
 			gnm.printDouble();
 		}
