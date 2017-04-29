@@ -110,9 +110,9 @@ public class Population {
 			popFitness();
 			tf = new ArrayList<Network>(generation);
 			fittest = Collections.min(tf);
+			System.out.println("Generation: " + i);
 			if(fittest.fitness > threshold){
 				System.out.println("Winning Fitness:  " + fittest.fitness);
-				System.out.println("Final Generation: " + i);
 				return fittest;
 			}
 		}
@@ -215,8 +215,8 @@ public class Population {
 
 		d = s1.size() + s2.size() - 2 * s.size() - e;
 
-		for (Edge g : s) {
-			w += Math.abs(g.getWeight(n1) - g.getWeight(n2));
+		for (Edge edg : s) {
+			w += Math.abs(edg.getWeight(n1) - edg.getWeight(n2));
 		}
 		w /= s.size();
 
@@ -236,9 +236,9 @@ public class Population {
 		for (int i : speciesMap.keySet()) {
 			double sum = 0f;
 			int c = 0;
-			for (Network g : speciesMap.get(i)) {
+			for (Network n : speciesMap.get(i)) {
 				c++;
-				sum += g.fitness;
+				sum += n.fitness;
 			}
 			sum /= c;
 			sumMap.put(i, sum);
@@ -314,7 +314,6 @@ public class Population {
 			net.mutate();
 			tmpPop.add(net);
 		}
-		//gen++;
 		generation = new ArrayList<Network>(tmpPop);
 		speciate();
 
