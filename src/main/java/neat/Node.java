@@ -33,21 +33,21 @@ class Node implements Comparable<Node> {
 	}
 
 	/**
-	 * Calculate the value of this Node for Genome gnm.
+	 * Calculate the value of this Node for Network net.
 	 *
-	 * @param gnm
-	 *            the gnm
+	 * @param net
+	 *            the net
 	 * @param depth
 	 *            the depth
 	 * @return the calulated value of this node
 	 */
-	public double calculateNode(Genome gnm) {
+	public double calculateNode(Network net) {
 		if (calculated) {
 			return value;
 		}
 		double tmp = 0f;
-		for (Gene g : gnm.genome.get(this)) {
-			tmp += g.in.calculateNode(gnm) * g.weightMap.get(gnm);
+		for (Edge e : net.network.get(this)) {
+			tmp += e.in.calculateNode(net) * e.weightMap.get(net);
 		}
 
 		calculated = true;

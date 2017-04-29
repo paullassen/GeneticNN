@@ -18,9 +18,9 @@ public class NEAT {
 		// sum of 3 [1 bit]-inputs
 		// FitnessFunction fitFunc = new ADD3I2O();
 
-		OverGen og = new OverGen(fitFunc);
+		Population og = new Population(fitFunc);
 
-		Genome gnm = og.run(100, 1000);
+		Network gnm = og.run(100, 1000);
 		if (gnm != null) {
 			gnm.printDouble();
 		}

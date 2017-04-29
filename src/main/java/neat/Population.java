@@ -14,34 +14,31 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 /**
- * This class contains populations of genomes and manipulates/evolves them
+ * This class contains populations of networks and manipulates/evolves them
  * toward a higher fitness
  */
-public class OverGen {
+public class Population {
 
-	/** MultiMap of all Genes indexed by output node */
-	Multimap<Node, Gene> geneMap = HashMultimap.create();
+	/** MultiMap of all Edges indexed by output node */
+	Multimap<Node, Edge> edgeMap = HashMultimap.create();
 	
 	/** Map of all species atchetypes indexed by species id */
-	Map<Integer, Genome> archetypeMap = new HashMap<Integer, Genome>();
+	Map<Integer, Network> archetypeMap = new HashMap<Integer, Network>();
 
 	/** Species map. */
-	List<Multimap<Integer, Genome>> speciesMap = new ArrayList<Multimap<Integer, Genome>>();
+	List<Multimap<Integer, Network>> speciesMap = new ArrayList<Multimap<Integer, Network>>();
 
-
-	
-	
 	/** List of input nodes */
 	List<Node> inList = new ArrayList<Node>();
 
 	/** List of output nodes */
 	List<Node> outList = new ArrayList<Node>();
 
-	/** The genome list. */
-	List<Genome> genomeList = new ArrayList<Genome>();
+	/** The network list. */
+	List<Network> networkList = new ArrayList<Network>();
 
-	/** List of all Genomes by Generation */
-	List<List<Genome>> generation = new ArrayList<List<Genome>>();
+	/** List of all Networks by Generation */
+	List<List<Network>> generation = new ArrayList<List<Network>>();
 
 	FitnessFunction fitFunc;
 
@@ -60,24 +57,24 @@ public class OverGen {
 
 	int topSize = 0;
 
-	/** The base genome */
-	Genome base;
+	/** The base network */
+	Network base;
 
 	/** The bias node */
 	Node bias;
 
 	/**
-	 * Instantiates a new over gen.
+	 * Instantiates a new Population to maximize f
 	 *
 	 * @param f
 	 *            the fitness function
 	 */
-	public OverGen(FitnessFunction f) {
+	public Population(FitnessFunction f) {
 		seed = System.currentTimeMillis();
 		rand = new Random(seed);
 		fitFunc = f;
 		bias = new Node(0);
-		base = new Genome(this);
+		base = new Network(this);
 		for (int i = 0; i < f.numInputs(); ++i) {
 			Node nod = new Node(0);
 			inList.add(nod);
@@ -90,7 +87,7 @@ public class OverGen {
 		for (int i = 0; i < outList.size(); ++i) {
 			Node nod = outList.get(i);
 			for (int j = -1; j < inList.size(); ++j) {
-				base.addGene((j < 0 ? bias : inList.get(j)), nod);
+				base.addEdge((j < 0 ? bias : inList.get(j)), nod);
 			}
 		}
 
@@ -103,21 +100,21 @@ public class OverGen {
 	 *            the population size
 	 * @param maxLoops
 	 *            the max number of loops
-	 * @return the winning genome, null if maxLoops
+	 * @return the winning network, null if maxLoops
 	 */
-	public Genome run(int popSize, int maxLoops) {
+	public Network run(int popSize, int maxLoops) {
 		double threshold = fitFunc.getThreshold();
 		createBasePop(popSize);
 		popFitness();
-		List<Genome> tf = new ArrayList<Genome>(generation.get(gen));
-		Genome fittest = Collections.min(tf);
+		List<Network> tf = new ArrayList<Network>(generation.get(gen));
+		Network fittest = Collections.min(tf);
 		while (fittest.fitness < threshold) {
 			populateGeneration();
 			popFitness();
 			if (gen >= maxLoops) {
 				return null;
 			}
-			tf = new ArrayList<Genome>(generation.get(gen));
+			tf = new ArrayList<Network>(generation.get(gen));
 			fittest = Collections.min(tf);
 		}
 		System.out.println("Winning Fitness: " + fittest.fitness);
@@ -155,15 +152,15 @@ public class OverGen {
 		popSize = pSize;
 		topSize = popSize / 10;
 
-		List<Genome> tmpPop = new ArrayList<Genome>();
+		List<Network> tmpPop = new ArrayList<Network>();
 		for (int i = 0; i < popSize; ++i) {
-			Genome g = new Genome(base);
+			Network g = new Network(base);
 			if (i > 0) {
 				for (int j = 0; j < 10; j++) {
 					g.mutate();
 				}
 			}
-			genomeList.add(g);
+			networkList.add(g);
 			tmpPop.add(g);
 		}
 		generation.add(tmpPop);
@@ -172,61 +169,61 @@ public class OverGen {
 
 	/**
 	 * Calculates the fitness for each member of the population. Then finds the
-	 * most fit Genomes and puts them in the topFit and sharedTopFit Sets
+	 * most fit Networks and puts them in the topFit and sharedTopFit Sets
 	 */
 	public void popFitness() {
-		for (Genome g : generation.get(gen)) {
+		for (Network g : generation.get(gen)) {
 
 			g.calculateFitness();
 			// g.calculateSharedFitness();
 		}
 
-		Genome g = Collections.min(generation.get(gen));
+		Network g = Collections.min(generation.get(gen));
 		System.out.println("\nTop Fitness and Shared Fitness of Generation " + gen);
-		System.out.printf("#1 Fitness:\t%.2f\n", g.fitness);
+		System.out.printf("#1 Fitness:\t%.6f\n", g.fitness);
 
 		System.out.println("_______________________________\n");
 	}
 
 	/**
-	 * Checks if two genomes are of the same species.
+	 * Checks if two networks are of the same species.
 	 *
 	 * @param g1
 	 *            the g 1
 	 * @param g2
 	 *            the g 2
-	 * @return true, if the genomes share species
+	 * @return true, if the networks share species
 	 */
-	public boolean compatable(Genome g1, Genome g2) {
+	public boolean compatable(Network g1, Network g2) {
 		double distThresh = 1f;
 		double c1 = 0.6f; // Weights the excess (e)
 		double c2 = 0.6f; // Weights the disjoint (d)
 		double c3 = 0.6f; // Weights the weight difference (w)
-		Set<Gene> s1 = new TreeSet<Gene>(g1.genome.values());
-		Set<Gene> s2 = new TreeSet<Gene>(g2.genome.values());
+		Set<Edge> s1 = new TreeSet<Edge>(g1.network.values());
+		Set<Edge> s2 = new TreeSet<Edge>(g2.network.values());
 		int e = 0;
 		int d = 0;
 		double w = 0f;
 		int N = (s1.size() > s2.size() ? s1.size() : s2.size());
-		Gene max1 = Collections.max(g1.genome.values());
-		Gene max2 = Collections.max(g2.genome.values());
+		Edge max1 = Collections.max(g1.network.values());
+		Edge max2 = Collections.max(g2.network.values());
 
 		if (max1 != max2) {
 			boolean b = max1.getId() > max2.getId();
 			int excess = (b ? max2 : max1).getId();
-			for (Gene g : (b ? s1 : s2)) {
+			for (Edge g : (b ? s1 : s2)) {
 				if (g.id > excess) {
 					e += 1;
 				}
 			}
 		}
 
-		Set<Gene> s = new TreeSet<Gene>(s1);
+		Set<Edge> s = new TreeSet<Edge>(s1);
 		s.retainAll(s2);
 
 		d = s1.size() + s2.size() - 2 * s.size() - e;
 
-		for (Gene g : s) {
+		for (Edge g : s) {
 			w += Math.abs(g.getWeight(g1) - g.getWeight(g2));
 		}
 		w /= s.size();
@@ -247,7 +244,7 @@ public class OverGen {
 		for (int i : speciesMap.get(gen).keySet()) {
 			double sum = 0f;
 			int c = 0;
-			for (Genome g : speciesMap.get(gen).get(i)) {
+			for (Network g : speciesMap.get(gen).get(i)) {
 				c++;
 				sum += g.fitness;
 			}
@@ -256,27 +253,28 @@ public class OverGen {
 			totalSum += sum;
 		}
 
-		List<List<Genome>> spcsList = new ArrayList<List<Genome>>();
+		List<List<Network>> spcsList = new ArrayList<List<Network>>();
 		List<Integer> topList = new ArrayList<Integer>();
+		
 		for (int i : speciesMap.get(gen).keySet()) {
-			List<Genome> spcs = new ArrayList<Genome>(speciesMap.get(gen).get(i));
+			List<Network> spcs = new ArrayList<Network>(speciesMap.get(gen).get(i));
 			Collections.sort(spcs);
 			int top = (int) Math.round((popSize - topSize) * (sumMap.get(i) / totalSum));
 			spcsList.add(spcs.subList(0, spcs.size() / 2));
 			topList.add(top);
 		}
 
-		Set<Genome> tmpPop = new TreeSet<Genome>();
-		for (List<Genome> spcs : spcsList) {
+		Set<Network> tmpPop = new TreeSet<Network>();
+		for (List<Network> spcs : spcsList) {
 			if (!spcs.isEmpty()) {				
 				tmpPop.add(spcs.get(0));
 			}
 		}
-		List<Genome> tmp = new ArrayList<Genome>();
-		for (Genome g : tmpPop) {
-			Genome gnm = new Genome(g);
-			gnm.mutate();
-			tmp.add(gnm);
+		List<Network> tmp = new ArrayList<Network>();
+		for (Network n : tmpPop) {
+			Network net = new Network(n);
+			net.mutate();
+			tmp.add(net);
 		}
 		tmpPop.addAll(tmp);
 		for (int i = 0; i < topList.size(); ++i) {
@@ -285,9 +283,9 @@ public class OverGen {
 					break;
 				} else if (spcsList.get(i).size() == 1) {
 					if (j * 2 < topList.get(i)) {
-						Genome g = spcsList.get(i).get(0).mate(spcsList.get(i).get(0));
-						g.mutate();
-						tmpPop.add(g);
+						Network net = spcsList.get(i).get(0).mate(spcsList.get(i).get(0));
+						net.mutate();
+						tmpPop.add(net);
 					} else {
 						int spc = rand.nextInt(spcsList.size());
 						while (spcsList.get(spc).size() == 0) {
@@ -295,8 +293,8 @@ public class OverGen {
 
 						}
 						int spInd = rand.nextInt(spcsList.get(spc).size());
-						Genome g = spcsList.get(i).get(0).mate(spcsList.get(spc).get(spInd));
-						tmpPop.add(g);
+						Network net = spcsList.get(i).get(0).mate(spcsList.get(spc).get(spInd));
+						tmpPop.add(net);
 					}
 				} else {
 					int ind = rand.nextInt(spcsList.get(i).size());
@@ -310,22 +308,22 @@ public class OverGen {
 					}
 					int spInd = rand.nextInt(spcsList.get(spc).size());
 
-					Genome g = spcsList.get(i).get(ind).mate(spcsList.get(spc).get(spInd));
-					tmpPop.add(g);
+					Network net = spcsList.get(i).get(ind).mate(spcsList.get(spc).get(spInd));
+					tmpPop.add(net);
 				}
 			}
 		}
-		tmp = new ArrayList<Genome>(tmpPop);
+		tmp = new ArrayList<Network>(tmpPop);
 		while (tmpPop.size() < popSize) {
 			int r1 = rand.nextInt(tmp.size());
 			int r2 = rand.nextInt(tmp.size());
 
-			Genome g = tmp.get(r1).mate(tmp.get(r2));
-			g.mutate();
-			tmpPop.add(g);
+			Network net = tmp.get(r1).mate(tmp.get(r2));
+			net.mutate();
+			tmpPop.add(net);
 		}
 		gen++;
-		generation.add(new ArrayList<Genome>(tmpPop));
+		generation.add(new ArrayList<Network>(tmpPop));
 		speciate();
 
 	}
@@ -334,43 +332,41 @@ public class OverGen {
 	 * Define the different species.
 	 */
 	public void speciate() {
-		Multimap<Integer, Genome> thisGen = HashMultimap.create();
-
+		Multimap<Integer, Network> thisGeneration = HashMultimap.create();
 		if (gen == 0) {
-
 			archetypeMap.put(0, generation.get(gen).get(0));
-			thisGen.put(0, generation.get(gen).get(0));
+			thisGeneration.put(0, generation.get(gen).get(0));
 		}
-		for (Genome g : generation.get(gen)) {
-			if (!thisGen.containsValue(g)) {
+		for (Network net : generation.get(gen)) {
+			if (!thisGeneration.containsValue(net)) {
 				for (int i : archetypeMap.keySet()) {
-					if (compatable(g, archetypeMap.get(i))) {
-						thisGen.put(i, g);
+					if (compatable(net, archetypeMap.get(i))) {
+						thisGeneration.put(i, net);
 						break;
 					}
 				}
 			}
-			if (!thisGen.containsValue(g)) {
+			if (!thisGeneration.containsValue(net)) {
 				int spNum = Collections.max(archetypeMap.keySet()) + 1;
-				archetypeMap.put(spNum, g);
-				thisGen.put(spNum, g);
+				archetypeMap.put(spNum, net);
+				thisGeneration.put(spNum, net);
 			}
 		}
-		speciesMap.add(thisGen);
+		speciesMap.add(thisGeneration);
 
-		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGen.keySet().size() + "\tPopulation: "
+		System.out.println("\nNodeNum: " + Node.count + "\tSpecies: " + thisGeneration.keySet().size() + "\tPopulation: "
 				+ generation.get(gen).size() + "\t Time Since Last: "
 				+ (System.currentTimeMillis() - lastTime) / 1000f);
 		lastTime = System.currentTimeMillis();
 	}
 
 	/**
-	 * Adds the gene g to this Genome.
+	 * Adds the edge e to this Network.
 	 *
-	 * @param g
-	 *            the gene to add
+	 * @param e
+	 *            the edge to add
 	 */
-	public void addGene(Gene g) {
-		geneMap.put(g.out, g);
+	public void addEdge(Edge e) {
+		edgeMap.put(e.out, e);
 	}
 }

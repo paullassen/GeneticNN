@@ -19,20 +19,20 @@ public class XOR implements FitnessFunction {
 	}
 
 	@Override
-	public double calculateFitness(Genome gnm) {
+	public double calculateFitness(Network net) {
 		List<Double> inList = new ArrayList<Double>();
 		inList.add(0d);
 		inList.add(0d);
-		double d1 = gnm.calculate(inList).get(0);
+		double d1 = net.calculate(inList).get(0);
 		inList.set(0, 0d);
 		inList.set(1, 1d);
-		double d2 = 1d - gnm.calculate(inList).get(0);
+		double d2 = 1d - net.calculate(inList).get(0);
 		inList.set(0, 1d);
 		inList.set(1, 0d);
-		double d3 = 1d - gnm.calculate(inList).get(0);
+		double d3 = 1d - net.calculate(inList).get(0);
 		inList.set(0, 1d);
 		inList.set(1, 1d);
-		double d4 = gnm.calculate(inList).get(0);
+		double d4 = net.calculate(inList).get(0);
 		double d = d1 + d2 + d3 + d4;
 		return (4d - d) * (4d - d);
 	}

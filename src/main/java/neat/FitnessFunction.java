@@ -18,6 +18,6 @@ public interface FitnessFunction {
 	 * @param gnm
 	 *            the gnm
 	 */
-	public double calculateFitness(Genome gnm);
+	public double calculateFitness(Network net);
 
 }
