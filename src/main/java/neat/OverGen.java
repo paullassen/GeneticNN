@@ -106,7 +106,7 @@ public class OverGen {
 	 * @return the winning genome, null if maxLoops
 	 */
 	public Genome run(int popSize, int maxLoops) {
-		float threshold = fitFunc.getThreshold();
+		double threshold = fitFunc.getThreshold();
 		createBasePop(popSize);
 		popFitness();
 		List<Genome> tf = new ArrayList<Genome>(generation.get(gen));
@@ -183,7 +183,7 @@ public class OverGen {
 
 		Genome g = Collections.min(generation.get(gen));
 		System.out.println("\nTop Fitness and Shared Fitness of Generation " + gen);
-		System.out.println("#1 Fitness:\t" + g.fitness);
+		System.out.printf("#1 Fitness:\t%.2f\n", g.fitness);
 
 		System.out.println("_______________________________\n");
 	}
@@ -198,15 +198,15 @@ public class OverGen {
 	 * @return true, if the genomes share species
 	 */
 	public boolean compatable(Genome g1, Genome g2) {
-		float distThresh = 1f;
-		float c1 = 0.6f; // Weights the excess (e)
-		float c2 = 0.6f; // Weights the disjoint (d)
-		float c3 = 0.6f; // Weights the weight difference (w)
+		double distThresh = 1f;
+		double c1 = 0.6f; // Weights the excess (e)
+		double c2 = 0.6f; // Weights the disjoint (d)
+		double c3 = 0.6f; // Weights the weight difference (w)
 		Set<Gene> s1 = new TreeSet<Gene>(g1.genome.values());
 		Set<Gene> s2 = new TreeSet<Gene>(g2.genome.values());
 		int e = 0;
 		int d = 0;
-		float w = 0f;
+		double w = 0f;
 		int N = (s1.size() > s2.size() ? s1.size() : s2.size());
 		Gene max1 = Collections.max(g1.genome.values());
 		Gene max2 = Collections.max(g2.genome.values());
@@ -231,7 +231,7 @@ public class OverGen {
 		}
 		w /= s.size();
 
-		float distance = (c1 * e + c2 * d) / N + c3 * w;
+		double distance = (c1 * e + c2 * d) / N + c3 * w;
 
 		return distance < distThresh;
 	}
@@ -241,11 +241,11 @@ public class OverGen {
 	 */
 	public void populateGeneration() {
 
-		Map<Integer, Float> sumMap = new TreeMap<Integer, Float>();
-		float totalSum = 0f;
+		Map<Integer, Double> sumMap = new TreeMap<Integer, Double>();
+		double totalSum = 0f;
 
 		for (int i : speciesMap.get(gen).keySet()) {
-			float sum = 0f;
+			double sum = 0f;
 			int c = 0;
 			for (Genome g : speciesMap.get(gen).get(i)) {
 				c++;
@@ -261,7 +261,7 @@ public class OverGen {
 		for (int i : speciesMap.get(gen).keySet()) {
 			List<Genome> spcs = new ArrayList<Genome>(speciesMap.get(gen).get(i));
 			Collections.sort(spcs);
-			int top = Math.round((popSize - topSize) * (sumMap.get(i) / totalSum));
+			int top = (int) Math.round((popSize - topSize) * (sumMap.get(i) / totalSum));
 			spcsList.add(spcs.subList(0, spcs.size() / 2));
 			topList.add(top);
 		}

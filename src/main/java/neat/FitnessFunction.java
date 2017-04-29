@@ -6,7 +6,7 @@ package neat;
  */
 public interface FitnessFunction {
 
-	public float getThreshold();
+	public double getThreshold();
 	
 	public int numInputs();
 	
@@ -18,6 +18,6 @@ public interface FitnessFunction {
 	 * @param gnm
 	 *            the gnm
 	 */
-	public float calculateFitness(Genome gnm);
+	public double calculateFitness(Genome gnm);
 
 }

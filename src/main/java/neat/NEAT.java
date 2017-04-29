@@ -22,7 +22,7 @@ public class NEAT {
 
 		Genome gnm = og.run(100, 1000);
 		if (gnm != null) {
-			gnm.printFloat();
+			gnm.printDouble();
 		}
 	}
 }

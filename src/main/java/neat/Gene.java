@@ -20,9 +20,9 @@ class Gene implements Comparable<Gene> {
 	private final Random rand;
 
 	/**
-	 * The weight map contains a float for each Genome in which is is contained
+	 * The weight map contains a double for each Genome in which is is contained
 	 */
-	HashMap<Genome, Float> weightMap = new HashMap<Genome, Float>();
+	HashMap<Genome, Double> weightMap = new HashMap<Genome, Double>();
 
 	/**
 	 * The state map contains a boolean (representing enabled or disabled) for
@@ -54,7 +54,7 @@ class Gene implements Comparable<Gene> {
 		return id;
 	}
 
-	public float getWeight(Genome g) {
+	public double getWeight(Genome g) {
 		return weightMap.get(g);
 	}
 
@@ -65,8 +65,8 @@ class Gene implements Comparable<Gene> {
 	 *            the Genome
 	 */
 	public void changeWeight(Genome g) {
-		float weight = weightMap.get(g).floatValue();
-		weight = weight + rand.nextFloat() * 4 - 2f;
+		double weight = weightMap.get(g).doubleValue();
+		weight = weight + rand.nextDouble() * 4 - 2f;
 		weightMap.replace(g, weight);
 	}
 
@@ -95,7 +95,7 @@ class Gene implements Comparable<Gene> {
 	 *            the Genome to which the Gene is added
 	 */
 	public void addGenome(Genome g) {
-		float weight = rand.nextFloat() * 4 - 2;
+		double weight = rand.nextDouble() * 4 - 2;
 		weightMap.put(g, weight);
 		this.enable(g);
 	}

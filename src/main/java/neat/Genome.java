@@ -23,7 +23,7 @@ class Genome implements Comparable<Genome> {
 	/** Map containing all genes in Genome indexed by output Node */
 	HashMultimap<Node, Gene> genome = HashMultimap.create();
 
-	float fitness;
+	double fitness;
 
 	int id;
 
@@ -319,7 +319,7 @@ class Genome implements Comparable<Genome> {
 	/**
 	 * Prints the Genome weights.
 	 */
-	public void printFloat() {
+	public void printDouble() {
 		Set<Node> out = new TreeSet<Node>(genome.keySet());
 		Set<Node> in = new TreeSet<Node>(genIn.keySet());
 		Set<Node> all = new TreeSet<Node>(in);
@@ -388,7 +388,7 @@ class Genome implements Comparable<Genome> {
 	 *            the list of inputs
 	 * @return the list of outputs
 	 */
-	public List<Float> calculate(List<Float> inList) {
+	public List<Double> calculate(List<Double> inList) {
 		if (inList.size() != og.inList.size()) {
 			throw new IllegalArgumentException();
 		}
@@ -403,7 +403,7 @@ class Genome implements Comparable<Genome> {
 			n.value = 0f;
 			n.calculated = false;
 		}
-		List<Float> retList = new ArrayList<Float>();
+		List<Double> retList = new ArrayList<Double>();
 		for (Node n : og.outList) {
 			retList.add(n.calculateNode(this));
 		}
@@ -421,8 +421,8 @@ class Genome implements Comparable<Genome> {
 	public int compareTo(Genome arg0) {
 		// Compare Genomes by shared fitness descending;
 		// Then id ascending;
-		Float af = arg0.fitness;
-		Float tf = this.fitness;
+		Double af = arg0.fitness;
+		Double tf = this.fitness;
 		Integer aid = arg0.id;
 		Integer iid = this.id;
 		return (af.compareTo(tf) == 0 ? (iid.compareTo(aid)) : af.compareTo(tf));

@@ -19,26 +19,26 @@ public class XOR implements FitnessFunction {
 	}
 
 	@Override
-	public float calculateFitness(Genome gnm) {
-		List<Float> inList = new ArrayList<Float>();
-		inList.add(0f);
-		inList.add(0f);
-		float d1 = gnm.calculate(inList).get(0);
-		inList.set(0, 0f);
-		inList.set(1, 1f);
-		float d2 = 1f - gnm.calculate(inList).get(0);
-		inList.set(0, 1f);
-		inList.set(1, 0f);
-		float d3 = 1f - gnm.calculate(inList).get(0);
-		inList.set(0, 1f);
-		inList.set(1, 1f);
-		float d4 = gnm.calculate(inList).get(0);
-		float d = d1 + d2 + d3 + d4;
-		return (4f - d) * (4f - d);
+	public double calculateFitness(Genome gnm) {
+		List<Double> inList = new ArrayList<Double>();
+		inList.add(0d);
+		inList.add(0d);
+		double d1 = gnm.calculate(inList).get(0);
+		inList.set(0, 0d);
+		inList.set(1, 1d);
+		double d2 = 1d - gnm.calculate(inList).get(0);
+		inList.set(0, 1d);
+		inList.set(1, 0d);
+		double d3 = 1d - gnm.calculate(inList).get(0);
+		inList.set(0, 1d);
+		inList.set(1, 1d);
+		double d4 = gnm.calculate(inList).get(0);
+		double d = d1 + d2 + d3 + d4;
+		return (4d - d) * (4d - d);
 	}
 
 	@Override
-	public float getThreshold() {
-		return 15.9f;
+	public double getThreshold() {
+		return 15.9d;
 	}
 }

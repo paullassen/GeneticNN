@@ -13,7 +13,7 @@ class Node implements Comparable<Node> {
 	boolean calculated;
 
 	/** The Node Output. */
-	public float value = 0f;
+	public double value = 0f;
 
 	/**
 	 * Instantiates a new node.
@@ -41,17 +41,17 @@ class Node implements Comparable<Node> {
 	 *            the depth
 	 * @return the calulated value of this node
 	 */
-	public float calculateNode(Genome gnm) {
+	public double calculateNode(Genome gnm) {
 		if (calculated) {
 			return value;
 		}
-		float tmp = 0f;
+		double tmp = 0f;
 		for (Gene g : gnm.genome.get(this)) {
 			tmp += g.in.calculateNode(gnm) * g.weightMap.get(gnm);
 		}
 
 		calculated = true;
-		value = (float) (1 / (1 + Math.exp(-5 * tmp)));
+		value = (double) (1 / (1 + Math.exp(-5 * tmp)));
 		return value;
 	}
 }
