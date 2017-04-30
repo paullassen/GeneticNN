@@ -16,13 +16,18 @@ public class NEAT {
 		// Three input XOR
 		// FitnessFunction fitFunc = new XOR3I();
 		// sum of 3 [1 bit]-inputs
-		FitnessFunction fitFunc = new ADD2I2O();
+		// FitnessFunction fitFunc = new ADD2I2O();
+
+		InvertedPendulumOnCart fitFunc = new InvertedPendulumOnCart();
 
 		Population og = new Population(fitFunc);
 
-		Network gnm = og.run(200, 500);
-		if (gnm != null) {
-			gnm.printDouble();
+		Network network = og.run(200, 500);
+		if (network != null) {
+			network.printDouble();
 		}
+
+		fitFunc.drawNet(network);
 	}
+
 }
