@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="neat.Edge" project="geneticnn" file="/geneticnn/src/main/java/neat/Edge.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="172" y="759"/>    
+    <position height="-1" width="-1" x="171" y="704"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -73,138 +73,138 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="9">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="10" name="disabler">        
-        <position height="18" width="48" x="347" y="615"/>      
-      </attribute>      
-      <multiplicity id="11" minimum="0" maximum="1">        
-        <position height="16" width="23" x="396" y="635"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="12">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="13" name="fitFunc">        
-        <position height="18" width="43" x="646" y="214"/>      
-      </attribute>      
-      <multiplicity id="14" minimum="0" maximum="1">        
-        <position height="16" width="23" x="624" y="215"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="15">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="16" name="bias">        
-        <position height="18" width="30" x="416" y="564"/>      
-      </attribute>      
-      <multiplicity id="17" minimum="0" maximum="1">        
-        <position height="16" width="23" x="448" y="566"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="18">    
+  <realization id="9">    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="4"/>  
   </realization>  
-  <realization id="19">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="4"/>  
-  </realization>  
-  <association id="20">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="in">        
-        <position height="18" width="18" x="372" y="631"/>      
+  <association id="10">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="11" name="base">        
+        <position height="18" width="34" x="294" y="183"/>      
       </attribute>      
-      <multiplicity id="22" minimum="0" maximum="1">        
-        <position height="16" width="23" x="395" y="619"/>      
+      <multiplicity id="12" minimum="0" maximum="1">        
+        <position height="16" width="23" x="270" y="183"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="23">    
+  <association id="13">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="24" name="archetypeMap">        
-        <position height="18" width="79" x="292" y="184"/>      
+      <attribute id="14" name="archetypeMap">        
+        <position height="18" width="79" x="293" y="197"/>      
       </attribute>      
-      <multiplicity id="25" minimum="0" maximum="2147483647">        
+      <multiplicity id="15" minimum="0" maximum="2147483647">        
         <position height="16" width="21" x="271" y="198"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="26">    
+  <association id="16">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="27" name="inList">        
-        <position height="18" width="35" x="417" y="539"/>      
+      <attribute id="17" name="fitFunc">        
+        <position height="18" width="43" x="646" y="214"/>      
       </attribute>      
-      <multiplicity id="28" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="458" y="554"/>      
+      <multiplicity id="18" minimum="0" maximum="1">        
+        <position height="16" width="23" x="624" y="215"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="30" name="outList">        
-        <position height="18" width="42" x="415" y="552"/>      
-      </attribute>      
-      <multiplicity id="31" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="453" y="542"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
+  <association id="19">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="33" name="pop">        
-        <position height="18" width="22" x="335" y="330"/>      
+      <attribute id="20" name="pop">        
+        <position height="18" width="28" x="336" y="306"/>      
       </attribute>      
-      <multiplicity id="34" minimum="0" maximum="1">        
-        <position height="16" width="23" x="357" y="332"/>      
+      <multiplicity id="21" minimum="0" maximum="1">        
+        <position height="16" width="23" x="366" y="309"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="36" name="base">        
-        <position height="18" width="34" x="297" y="171"/>      
+  <association id="22">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="23" name="in">        
+        <position height="18" width="18" x="376" y="634"/>      
       </attribute>      
-      <multiplicity id="37" minimum="0" maximum="1">        
-        <position height="16" width="23" x="271" y="168"/>      
+      <multiplicity id="24" minimum="0" maximum="1">        
+        <position height="16" width="23" x="395" y="619"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="38">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="39" name="out">        
-        <position height="18" width="25" x="367" y="649"/>      
+  <association id="25">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="26" name="bias">        
+        <position height="18" width="30" x="416" y="564"/>      
       </attribute>      
-      <multiplicity id="40" minimum="0" maximum="1">        
+      <multiplicity id="27" minimum="0" maximum="1">        
+        <position height="16" width="23" x="451" y="565"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="28">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="29" name="outList">        
+        <position height="18" width="42" x="406" y="552"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="450" y="538"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="31">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <association id="32">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="33" name="out">        
+        <position height="18" width="25" x="369" y="651"/>      
+      </attribute>      
+      <multiplicity id="34" minimum="0" maximum="1">        
         <position height="16" width="23" x="394" y="652"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="41">    
+  <association id="35">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="36" name="inList">        
+        <position height="18" width="35" x="414" y="538"/>      
+      </attribute>      
+      <multiplicity id="37" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="450" y="551"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="38">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="4"/>  
   </realization>  
+  <association id="39">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="40" name="disabler">        
+        <position height="18" width="48" x="348" y="619"/>      
+      </attribute>      
+      <multiplicity id="41" minimum="0" maximum="1">        
+        <position height="16" width="23" x="396" y="635"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
