@@ -12,13 +12,13 @@ public class NEAT {
 	 */
 	public static void main(String[] args) {
 		// Two input XOR
-		// FitnessFunction fitFunc = new XOR();
+		 FitnessFunction fitFunc = new XOR();
 		// Three input XOR
 		// FitnessFunction fitFunc = new XOR3I();
 		// sum of 3 [1 bit]-inputs
 		// FitnessFunction fitFunc = new ADD2I2O();
 
-		InvertedPendulumOnCart fitFunc = new InvertedPendulumOnCart();
+		// InvertedPendulumOnCart fitFunc = new InvertedPendulumOnCart();
 
 		Population og = new Population(fitFunc);
 
@@ -27,7 +27,8 @@ public class NEAT {
 			network.printDouble();
 		}
 
-		fitFunc.drawNet(network);
+		//fitFunc.drawNet(network);
 	}
 
 }
+ 

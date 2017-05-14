@@ -1,5 +1,7 @@
 package neat;
 
+import java.util.Map;
+
 /**
  * The Class Node.
  */
@@ -10,10 +12,6 @@ class Node implements Comparable<Node> {
 
 	boolean input;
 
-	boolean calculated;
-
-	/** The Node Output. */
-	public double value = 0f;
 
 	/**
 	 * Instantiates a new node.
@@ -24,7 +22,6 @@ class Node implements Comparable<Node> {
 	public Node(int mode) {
 		id = count++;
 		input = (mode == 0);
-		calculated = input;
 	}
 
 	@Override
@@ -41,17 +38,18 @@ class Node implements Comparable<Node> {
 	 *            the depth
 	 * @return the calulated value of this node
 	 */
-	public double calculateNode(Network net) {
-		if (calculated) {
-			return value;
-		}
-		double tmp = 0f;
-		for (Edge e : net.network.get(this)) {
-			tmp += e.in.calculateNode(net) * e.weightMap.get(net);
+	public double calculateNode(Network net, Map<Node, Double> interimMap) {
+		if(interimMap.containsKey(this)){
+			return interimMap.get(this);
 		}
 
-		calculated = true;
-		value = (double) (1 / (1 + Math.exp(-5 * tmp)));
-		return value;
+		double value = 0f;
+		for (Edge e : net.network.get(this)) {
+			value += e.in.calculateNode(net, interimMap) * e.weightMap.get(net);
+		}
+
+		value = (double) (1 / (1 + Math.exp(-5 * value)));
+		interimMap.put(this, value);
+		return interimMap.get(this);
 	}
 }

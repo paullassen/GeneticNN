@@ -2,8 +2,10 @@ package neat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -389,23 +391,19 @@ class Network implements Comparable<Network> {
 	 * @return the list of outputs
 	 */
 	public List<Double> calculate(List<Double> inList) {
+		Map<Node, Double> interimMap = new HashMap<Node,Double>(); 
 		if (inList.size() != pop.inList.size()) {
 			throw new IllegalArgumentException();
 		}
 		// Set inputs
+		interimMap.put(pop.bias, 1d);
 		for (int i = 0; i < pop.inList.size(); ++i) {
-			Node n = pop.inList.get(i);
-			n.value = inList.get(i);
-			pop.bias.value = 1f;
+			interimMap.put(pop.inList.get(i), inList.get(i));
 		}
 
-		for (Node n : network.keySet()) {
-			n.value = 0f;
-			n.calculated = false;
-		}
 		List<Double> retList = new ArrayList<Double>();
 		for (Node n : pop.outList) {
-			retList.add(n.calculateNode(this));
+			retList.add(n.calculateNode(this, interimMap));
 		}
 		return retList;
 	}
