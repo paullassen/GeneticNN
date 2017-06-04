@@ -428,7 +428,6 @@ class Network implements Comparable<Network>, Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		calculateFitness();
 	}
 }

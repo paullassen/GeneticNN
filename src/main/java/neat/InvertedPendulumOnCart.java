@@ -28,7 +28,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 
 	@Override
 	public double getThreshold() {
-		return 29999;
+		return 9999;
 	}
 
 	@Override

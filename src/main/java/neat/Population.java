@@ -170,21 +170,23 @@ public class Population {
 	 */
 	public void popFitness() {
 		List<Thread> threadList = new ArrayList<Thread>();
-		/*
 		for (Network n : generation) {
 			Thread thread = new Thread(n);
 			threadList.add(thread);
 			thread.start();
 		}
-		while(!threadList.isEmpty()){
-			if (!threadList.get(0).isAlive()) {
-				threadList.remove(threadList.get(0));
+		for(Thread thread: threadList){
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		/* Use this for IPoC*/
+		/* Use this for IPoC
 		for(Network network : generation){
 			network.calculateFitness();
-		}
+		}*/
 		
 		Network n = Collections.min(generation);
 		System.out.printf("Top Fitness:\t%.6f\n", n.fitness);
