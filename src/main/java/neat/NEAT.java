@@ -1,5 +1,7 @@
 package neat;
 
+import java.io.IOException;
+
 /**
  * The Class NEAT. This is the Main class
  */
@@ -12,22 +14,26 @@ public class NEAT {
 	 */
 	public static void main(String[] args) {
 		// Two input XOR
-		 FitnessFunction fitFunc = new XOR();
+		// FitnessFunction fitFunc = new XOR();
 		// Three input XOR
 		// FitnessFunction fitFunc = new XOR3I();
 		// sum of 3 [1 bit]-inputs
 		// FitnessFunction fitFunc = new ADD2I2O();
 
-		// InvertedPendulumOnCart fitFunc = new InvertedPendulumOnCart();
+		 InvertedPendulumOnCart fitFunc = new InvertedPendulumOnCart();
 
-		Population og = new Population(fitFunc);
+		Population pop = new Population(fitFunc);
 
-		Network network = og.run(200, 500);
+		Network network = pop.run(200, 2000);
 		if (network != null) {
 			network.printDouble();
 		}
-
-		//fitFunc.drawNet(network);
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 fitFunc.drawNet(pop.topFitness());
 	}
 
 }

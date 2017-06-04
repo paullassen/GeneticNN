@@ -169,9 +169,23 @@ public class Population {
 	 * most fit Networks and puts them in the topFit and sharedTopFit Sets
 	 */
 	public void popFitness() {
+		List<Thread> threadList = new ArrayList<Thread>();
+		/*
 		for (Network n : generation) {
-			n.calculateFitness();
+			Thread thread = new Thread(n);
+			threadList.add(thread);
+			thread.start();
 		}
+		while(!threadList.isEmpty()){
+			if (!threadList.get(0).isAlive()) {
+				threadList.remove(threadList.get(0));
+			}
+		}
+		/* Use this for IPoC*/
+		for(Network network : generation){
+			network.calculateFitness();
+		}
+		
 		Network n = Collections.min(generation);
 		System.out.printf("Top Fitness:\t%.6f\n", n.fitness);
 		System.out.println("_______________________________");
@@ -359,5 +373,10 @@ public class Population {
 	 */
 	public void addEdge(Edge e) {
 		edgeMap.put(e.out, e);
+	}
+
+	public Network topFitness() {
+		// TODO Auto-generated method stub
+		return Collections.min(generation);
 	}
 }

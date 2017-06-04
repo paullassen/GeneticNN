@@ -15,7 +15,7 @@ import com.google.common.collect.HashMultimap;
 /**
  * This class contains the network of Nodes (vertices) and Edges (edges)
  */
-class Network implements Comparable<Network> {
+class Network implements Comparable<Network>, Runnable {
 
 	static Population pop;
 
@@ -424,5 +424,11 @@ class Network implements Comparable<Network> {
 		Integer aid = arg0.id;
 		Integer iid = this.id;
 		return (af.compareTo(tf) == 0 ? (iid.compareTo(aid)) : af.compareTo(tf));
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		calculateFitness();
 	}
 }
