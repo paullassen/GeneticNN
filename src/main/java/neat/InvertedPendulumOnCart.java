@@ -22,8 +22,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 	double curRotA;
 	int step = 0;
 	int units;
-	List<Double> drawList = new ArrayList<Double>();
-
+	
 	static Network drawN = null;
 
 	@Override
@@ -41,7 +40,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 		return 1;
 	}
 
-	public void initStateVar(List<Double> inList) {
+	public void initStateVar() {
 		M = 0.5; // kg
 		m = 0.2; // kg
 		l = 0.3; // m
@@ -49,11 +48,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 		I = 0.006; // kgm^2
 		g = 9.8; // m/s^2
 		u = 0;
-		inList = new ArrayList<Double>();
-		inList.add(prevPos);
-		inList.add(prevVel);
-		inList.add(prevAng);
-		inList.add(preRotV);
+
 		timeStep = 0.001;
 		prevPos = 0d;
 		currPos = 0;
@@ -105,8 +100,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 
 
 		double fit = 0;
-		List<Double> inList = new ArrayList<>();
-		initStateVar(inList);
+		initStateVar();
 
 		while (Math.abs(prevPos) < 1.5 && Math.abs(prevAng) < 0.35 && fit < getThreshold()+1) {
 			
@@ -134,7 +128,7 @@ public class InvertedPendulumOnCart extends PApplet implements FitnessFunction {
 
 		step = 0;
 
-		initStateVar(drawList);
+		initStateVar();
 	}
 
 	public void draw() {

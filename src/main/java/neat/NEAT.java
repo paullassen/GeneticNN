@@ -33,7 +33,7 @@ public class NEAT {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		 fitFunc.drawNet(pop.topFitness());
+		 fitFunc.drawNet(network);
 	}
 
 }
