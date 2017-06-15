@@ -6,18 +6,18 @@ package neat;
  */
 public interface FitnessFunction {
 
-	public double getThreshold();
-	
-	public int numInputs();
-	
-	public int numOutputs();
-	
-	/**
-	 * Calculates the fitness of the input Genome.
-	 *
-	 * @param gnm
-	 *            the gnm
-	 */
-	public double calculateFitness(Network net);
+public double getThreshold();
+
+public int numInputs();
+
+public int numOutputs();
+
+/**
+ * Calculates the fitness of the input Genome.
+ *
+ * @param gnm
+ *            the gnm
+ */
+public double calculateFitness(Network net);
 
 }
